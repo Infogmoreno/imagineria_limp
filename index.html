@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script src="https://aframe.io/releases/1.4.2/aframe.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/web2vr@1.1.1/dist/web2vr.min.js"></script>
+    <script src="https://unpkg.com/aframe-look-at-component@0.8.0/dist/aframe-look-at-component.min.js"></script>
+    <script src="material-values.js"></script>
+    <script src="video-component.js"></script>
+    <script>
+      /* global AFRAME */
+      AFRAME.registerComponent("play-on-click", {
+        init: function () {
+          this.onClick = this.onClick.bind(this);
+        },
+        play: function () {
+          window.addEventListener("click", this.onClick);
+        },
+        pause: function () {
+          window.removeEventListener("click", this.onClick);
+        },
+        onClick: function (evt) {
+          var videoEl = this.el.getAttribute("material").src;
+          if (!videoEl) {
+            return;
+          }
+          this.el.object3D.visible = true;
+          videoEl.play();
+        },
+      });
+    </script>
+
+    <style>
+      .grid-container {
+        display: grid;
+        grid-template-rows: auto auto auto auto auto auto;
+        align-items: center;
+        justify-content: end;
+        height: 30%;
+        width: 90%;
+        gap: 8px 8px;
+        background-color: #ffffff00;
+        padding: 20px 30px;
+      }
+      .grid-container > div {
+        background-color: #ffffff00;
+        color: white;
+        border: none;
+      }
+      .grid-container > div:hover {
+        background-color: #ca9532fa;
+        opacity: 0.75;
+      }
+      .button {
+        background-color: #ddcc6dfa;
+        border-radius: 7px;
+        color: rgb(27, 4, 4);
+        padding: 8px 8px;
+        text-align: center;
+        font-family: Roboto;
+        color: #999896;
+        font-size: 15px;
+        margin: 0;
+        opacity: 0.8;
+        transition: 0.3s;
+
+        cursor: pointer;
+      }
+
+      .button:hover {
+        background-color: #ca9532fa;
+        color: white;
+        opacity: 1;
+      }
+    </style>
+  </head>
+
+  <body onload="init();">
+    <!-- Configuración escena -->
+
+    <a-scene
+      renderer="antialias: true;
+                   colorManagement: true;
+                   sortObjects: false;
+                   physicallyCorrectLights: true;
+                   maxCanvasWidth: 1920;
+                   maxCanvasHeight: 1920;"
+      webxr="requiredFeatures: hit-test,local-floor;
+                optionalFeatures: dom-overlay,unbounded;
+                overlayElement: #overlayUI;"
+      ar-hit-test="target:#grupo-imagen"
+    >
+      <!-- ASSETS -->
+
+      <a-assets>
+        <a-asset-item
+          id="imagen2D"
+          src="assets/Simulac_limpieza_Imagineria.glb"
+          
+        >
+        </a-asset-item>
+        <a-asset-item
+          id="ui-icons"
+          src="assets/leyendas.glb"
+          
+        >
+        </a-asset-item>
+        <a-asset-item
+          id="layer-videos"
+          src="assets/video_transparente.glb"
+          
+        >
+        </a-asset-item>
+        <img
+          id="transparente"
+          src="assets/transparente.png"
+          
+        />
+        <video
+          id="vid_vacio"
+          src="assets/sinnada.webm"
+          
+        ></video>
+        <video
+          id="vid_dorados"
+          src="assets/00_dorados_sim_limpieza.webm"
+          poster="assets/transparente.png"
+          preload="auto"
+          
+        ></video>
+        <video
+          id="vid_carnaduras"
+          src="assets/01_Encarnaduras_sim_limp.webm"
+          poster="assets/transparente.png"
+          preload="auto"
+          
+        ></video>
+        <video
+          id="vid_azules"
+          src="assets/02_Azules_ropajes_sim_limp.webm"
+          poster="assets/transparente.png"
+          preload="auto"
+          
+        ></video>
+        <video
+          id="vid_libro"
+          src="assets/03_libro_sim_limp.webm"
+          poster="assets/transparente.png"
+          preload="auto"
+          
+        ></video>
+        <video
+          id="vid_base"
+          src="assets/04_base_trono_sim_limp.webm"
+          poster="assets/transparente.png"
+          preload="auto"
+          
+        ></video>
+      </a-assets>
+
+      <!-- Modelo 3D -->
+
+      <a-entity id="grupo-imagen" position="0 0 -0.5">
+        <a-entity
+          id="modelo"
+          gltf-model="#imagen2D"
+          position="0 1 -1"
+        ></a-entity>
+
+        <a-video
+          id="capa_video_dorados"
+          width="0.610"
+          height="1"
+          material="shader: flat; src: #vid_vacio; side: front; transparent: true"
+          position="0 1.5 -0.9999"
+          
+          visible="false"
+        ></a-video>
+        <a-video
+          id="capa_video_carnaduras"
+          width="0.610"
+          height="1"
+          material="shader: flat; src: #vid_vacio; side: front;  transparent: true"
+          position="0 1.5 -0.9998"
+          
+          visible="false"
+        ></a-video>        
+        <a-video
+          id="capa_video_libro"
+          width="0.610"
+          height="1"
+          material="shader: flat; src: #vid_vacio; side: front; transparent: true"
+          position="0 1.5 -0.9997"          
+          visible="false"
+        ></a-video>
+        <a-video
+          id="capa_video_azules"
+          width="0.610"
+          height="1"
+          material="shader: flat; src: #vid_vacio; side: front; transparent: true"
+          position="0 1.5 -0.9995"          
+          visible="false"
+        ></a-video>
+        <a-video
+          id="capa_video_base"
+          width="0.610"
+          height="1"
+          material="shader: flat; src: #vid_vacio; side: front;  transparent: true"
+          position="0 1.5 -0.9994"
+          
+          visible="false"
+        ></a-video>
+      </a-entity>
+
+      <!-- Cámara -->
+
+      <a-entity id="Camera" camera="fov: 50" look-controls position="0 1.5 0">
+      </a-entity>
+
+      <!-- Luces -->
+
+      <!-- Entorno / Fondo -->
+    </a-scene>
+    <div id="overlayUI" class="overlayui">
+      <div id="interface_btn" class="grid-container">
+        <div id="btn_sinlimpieza" class="button">estado inicial</div>
+        <div id="btn_limp_dorados" class="button">dorados</div>
+        <div id="btn_limp_carnaduras" class="button">carnaciones</div>
+        <div id="btn_limp_azules" class="button">azules</div>
+        <div id="btn_limp_libro" class="button">libro</div>
+        <div id="btn_limp_base" class="button">peana</div>
+      </div>
+    </div>
+
+    <script>
+      const btn_sinlimpieza = document.querySelector("#btn_sinlimpieza");
+      const btn_limp_dorados = document.querySelector("#btn_limp_dorados");
+      const btn_limp_carnaduras = document.querySelector("#btn_limp_carnaduras");
+      const btn_limp_azules = document.querySelector("#btn_limp_azules");
+      const btn_limp_libro = document.querySelector("#btn_limp_libro");
+      const btn_limp_base = document.querySelector("#btn_limp_base");
+
+      const capa_video_dorados = document.querySelector("#capa_video_dorados");
+      const capa_video_carnaduras = document.querySelector("#capa_video_carnaduras");
+      const capa_video_azules = document.querySelector("#capa_video_azules");
+      const capa_video_libro = document.querySelector("#capa_video_libro");
+      const capa_video_base = document.querySelector("#capa_video_base");
+      
+      const vid_dorados = document.querySelector("#vid_dorados");
+      const vid_carnaduras= document.querySelector("#vid_carnaduras");
+      const vid_azules = document.querySelector("#vid_azules");
+      const vid_libro = document.querySelector("#vid_libro");
+      const vid_base = document.querySelector("#vid_base");
+
+      btn_sinlimpieza.addEventListener("click", function () {
+        capa_video_dorados.setAttribute("visible", false);
+        capa_video_carnaduras.setAttribute("visible", false);
+        capa_video_azules.setAttribute("visible", false);
+        capa_video_libro.setAttribute("visible", false);
+        capa_video_base.setAttribute("visible", false);
+        vid_dorados.pause();
+        vid_dorados.currentTime = 0;
+        vid_azules.pause();
+        vid_azules.currentTime = 0;
+        vid_carnaduras.pause();
+        vid_carnaduras.currentTime = 0;
+        vid_libro.pause();
+        vid_libro.currentTime = 0;
+        vid_base.pause();
+        vid_base.currentTime = 0;
+        
+      });
+           
+
+      btn_limp_dorados.addEventListener("click", function () {
+        capa_video_dorados.setAttribute("material", "src", "#vid_dorados");
+        vid_dorados.play();       
+        capa_video_dorados.setAttribute("visible", true);
+        capa_video_carnaduras.setAttribute("visible", true);        
+        capa_video_azules.setAttribute("visible", true);
+        capa_video_libro.setAttribute("visible", true);
+        capa_video_base.setAttribute("visible", true);  
+       
+      });
+
+      btn_limp_carnaduras.addEventListener("click", function () {
+        capa_video_carnaduras.setAttribute("material","src","#vid_carnaduras");
+        vid_carnaduras.play();        
+        capa_video_carnaduras.setAttribute("visible", true);
+        capa_video_dorados.setAttribute("visible", true);
+        capa_video_azules.setAttribute("visible", true);
+        capa_video_libro.setAttribute("visible", true);
+        capa_video_base.setAttribute("visible", true);
+        
+      });
+      
+      
+      btn_limp_azules.addEventListener("click", function () {
+        capa_video_azules.setAttribute("material","src","#vid_azules");
+        vid_azules.play();       
+        capa_video_dorados.setAttribute("visible", true);
+        capa_video_carnaduras.setAttribute("visible", true);
+        capa_video_azules.setAttribute("visible", true);        
+        capa_video_libro.setAttribute("visible", true);
+        capa_video_base.setAttribute("visible", true);
+               
+      });
+      
+      btn_limp_libro.addEventListener("click", function () {
+        capa_video_libro.setAttribute("material","src","#vid_libro");
+        vid_libro.play();       
+        capa_video_dorados.setAttribute("visible", true);
+        capa_video_carnaduras.setAttribute("visible", true);
+        capa_video_azules.setAttribute("visible", true);        
+        capa_video_libro.setAttribute("visible", true);
+        capa_video_base.setAttribute("visible", true);
+        
+      });
+       
+      btn_limp_base.addEventListener("click", function () {
+        capa_video_base.setAttribute("material","src","#vid_base");
+        vid_base.play();       
+        capa_video_dorados.setAttribute("visible", true);
+        capa_video_carnaduras.setAttribute("visible", true);
+        capa_video_azules.setAttribute("visible", true);        
+        capa_video_libro.setAttribute("visible", true);
+        capa_video_base.setAttribute("visible", true);        
+                
+      }); 
+      
+       btn_sinlimpieza.addEventListener("beforexrselect", (e) => {
+        e.preventDefault();
+      });
+       btn_limp_dorados.addEventListener("beforexrselect", (e) => {
+        e.preventDefault();
+      });
+       btn_limp_carnaduras.addEventListener("beforexrselect", (e) => {
+        e.preventDefault();
+      });
+       btn_limp_azules.addEventListener("beforexrselect", (e) => {
+        e.preventDefault();
+      });
+       btn_limp_libro.addEventListener("beforexrselect", (e) => {
+        e.preventDefault();
+      });
+       btn_limp_base.addEventListener("beforexrselect", (e) => {
+        e.preventDefault();
+      });
+    </script>
+  </body>
+</html>
